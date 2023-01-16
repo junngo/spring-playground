@@ -1,5 +1,0 @@
-package com.hello.springplayground.order;
-
-public interface OrderService {
-    Order createOrder(Long memberId, String itemName, int itemPrice);   // 주문 생성
-}

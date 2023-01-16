@@ -4,16 +4,16 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
     <!-- memberService -->
-    <bean id="memberService" class="com.hello.springplayground.member.MemberServiceImpl">
+    <bean id="memberService" class="com.hello.springplayground.inflearn.member.MemberServiceImpl">
         <constructor-arg name="memberRepository" ref="memberRepository" />
     </bean>
     <bean id="memberRepository"
-          class="com.hello.springplayground.member.MemoryMemberRepository" />
+          class="com.hello.springplayground.inflearn.member.MemoryMemberRepository" />
 
     <!-- orderService -->
-    <bean id="orderService" class="com.hello.springplayground.order.OrderServiceImpl">
+    <bean id="orderService" class="com.hello.springplayground.inflearn.order.OrderServiceImpl">
         <constructor-arg name="memberRepository" ref="memberRepository" />
         <constructor-arg name="discountPolicy" ref="discountPolicy" />
     </bean>
-    <bean id="discountPolicy" class="com.hello.springplayground.discount.RateDiscountPolicy" />
+    <bean id="discountPolicy" class="com.hello.springplayground.inflearn.discount.RateDiscountPolicy" />
 </beans>
