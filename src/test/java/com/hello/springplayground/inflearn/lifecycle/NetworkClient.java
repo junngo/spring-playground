@@ -1,6 +1,9 @@
 package com.hello.springplayground.inflearn.lifecycle;
 
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+
 public class NetworkClient {
 
     private String url;
@@ -30,6 +33,7 @@ public class NetworkClient {
     /**
      * 초기화 함수
      */
+    @PostConstruct
     public void init() {
         connect();
         call("초기화 연결 메시지");
@@ -38,6 +42,7 @@ public class NetworkClient {
     /**
      * 종료 함수
      */
+    @PreDestroy
     public void close() {
         disconnect();
     }
