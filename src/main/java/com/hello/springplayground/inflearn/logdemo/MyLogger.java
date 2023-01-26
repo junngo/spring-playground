@@ -1,6 +1,7 @@
 package com.hello.springplayground.inflearn.logdemo;
 
 import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -11,7 +12,7 @@ import java.util.UUID;
  * 추후에는 인터셉터를 활용하여 로그 사용도 가능.
  */
 @Component
-@Scope(value = "request")
+@Scope(value = "request", proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class MyLogger {
     private String uuid;
     private String requestURL;
