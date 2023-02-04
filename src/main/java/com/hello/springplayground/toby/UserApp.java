@@ -1,5 +1,6 @@
 package com.hello.springplayground.toby;
 
+import com.hello.springplayground.toby.dao.DaoFactory;
 import com.hello.springplayground.toby.dao.UserDao;
 import com.hello.springplayground.toby.domain.User;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -9,7 +10,7 @@ import java.sql.SQLException;
 @SpringBootApplication
 public class UserApp {
     public static void main(String[] args) throws SQLException, ClassNotFoundException {
-        UserDao dao = new UserDao();
+        UserDao dao = new DaoFactory().userDao();
 
         User user = new User();
         user.setId("jun");
