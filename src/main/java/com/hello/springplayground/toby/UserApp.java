@@ -4,13 +4,17 @@ import com.hello.springplayground.toby.dao.DaoFactory;
 import com.hello.springplayground.toby.dao.UserDao;
 import com.hello.springplayground.toby.domain.User;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import java.sql.SQLException;
 
 @SpringBootApplication
 public class UserApp {
     public static void main(String[] args) throws SQLException, ClassNotFoundException {
-        UserDao dao = new DaoFactory().userDao();
+//        UserDao dao = new DaoFactory().userDao();
+        ApplicationContext context = new AnnotationConfigApplicationContext(DaoFactory.class);
+        UserDao dao = context.getBean("userDao", UserDao.class);
 
         User user = new User();
         user.setId("jun");
