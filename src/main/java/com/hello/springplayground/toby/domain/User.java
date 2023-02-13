@@ -1,5 +1,10 @@
 package com.hello.springplayground.toby.domain;
 
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor
+@AllArgsConstructor
 public class User {
     String id;
     String name;
