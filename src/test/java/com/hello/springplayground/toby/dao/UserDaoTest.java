@@ -4,6 +4,7 @@ import com.hello.springplayground.toby.domain.User;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.dao.EmptyResultDataAccessException;
 
 import java.sql.SQLException;
 
@@ -57,5 +58,17 @@ class UserDaoTest {
 
         // then
         assertEquals(dao.getCount(), 3);
+    }
+
+    @Test
+    public void getUserFailure() throws SQLException, ClassNotFoundException {
+        // given
+        ApplicationContext context = new AnnotationConfigApplicationContext(DaoFactory.class);
+        UserDao dao = context.getBean("userDao", UserDao.class);
+        dao.deleteAll();
+        assertEquals(dao.getCount(), 0);
+
+        // when, then
+        assertThrows(EmptyResultDataAccessException.class, () -> dao.get("unknown_id"));
     }
 }
