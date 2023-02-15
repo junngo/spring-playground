@@ -1,17 +1,27 @@
 package com.hello.springplayground.toby.dao;
 
+import com.hello.springplayground.SpringPlaygroundApplication;
+import com.hello.springplayground.toby.dao.UserDao;
 import com.hello.springplayground.toby.domain.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.sql.SQLException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@ExtendWith(SpringExtension.class)
+@ContextConfiguration(classes = {SpringPlaygroundApplication.class})
 class UserDaoTest {
+
+    @Autowired
+    private ApplicationContext context;
 
     private UserDao dao;
     private User user1;
@@ -20,7 +30,8 @@ class UserDaoTest {
 
     @BeforeEach
     public void setUp() {
-        ApplicationContext context = new AnnotationConfigApplicationContext(DaoFactory.class);
+//        ApplicationContext context = new AnnotationConfigApplicationContext(DaoFactory.class);
+        System.out.println(this.context);
         this.dao = context.getBean("userDao", UserDao.class);
 
         this.user1 = new User("kim", "김길동", "spring1");
