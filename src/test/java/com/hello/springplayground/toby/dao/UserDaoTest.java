@@ -1,7 +1,6 @@
 package com.hello.springplayground.toby.dao;
 
 import com.hello.springplayground.SpringPlaygroundApplication;
-import com.hello.springplayground.toby.dao.UserDao;
 import com.hello.springplayground.toby.domain.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
