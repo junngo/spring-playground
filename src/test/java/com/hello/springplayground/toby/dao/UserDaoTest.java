@@ -32,6 +32,7 @@ class UserDaoTest {
 //        ApplicationContext context = new AnnotationConfigApplicationContext(DaoFactory.class);
         System.out.println(this.context);
         this.dao = context.getBean("userDao", UserDao.class);
+        System.out.println(this.dao);
 
         this.user1 = new User("kim", "김길동", "spring1");
         this.user2 = new User("lee", "이길동", "spring2");
@@ -77,7 +78,7 @@ class UserDaoTest {
     }
 
     @Test
-    public void getUserFailure() throws SQLException, ClassNotFoundException {
+    public void getUserFailure() throws SQLException {
         // given
         dao.deleteAll();
         assertEquals(dao.getCount(), 0);
