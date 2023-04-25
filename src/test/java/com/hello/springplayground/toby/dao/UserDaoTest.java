@@ -12,7 +12,6 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.sql.SQLException;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -42,28 +41,22 @@ class UserDaoTest {
     }
 
     @Test
-    public void addAndGet() throws SQLException, ClassNotFoundException {
+    public void addAndGet() {
         // given
         dao.deleteAll();
         assertEquals(dao.getCount(), 0);
 
-        User user = new User();
-        user.setId("junngo");
-        user.setName("myeong-jun");
-        user.setPassword("spring");
-
         // when
-        dao.add(user);
-        User user2 = dao.get(user.getId());
+        dao.add(user1);
+        User getUser1 = dao.get(user1.getId());
 
         // then
         assertEquals(dao.getCount(), 1);
-        assertEquals(user2.getName(), user.getName());
-        assertEquals(user2.getPassword(), user.getPassword());
+        checkSameUser(getUser1, user1);
     }
 
     @Test
-    public void count() throws SQLException, ClassNotFoundException {
+    public void count() {
         // given
         dao.deleteAll();
         assertEquals(dao.getCount(), 0);
@@ -80,7 +73,7 @@ class UserDaoTest {
     }
 
     @Test
-    public void getUserFailure() throws SQLException {
+    public void getUserFailure() {
         // given
         dao.deleteAll();
         assertEquals(dao.getCount(), 0);
@@ -105,9 +98,28 @@ class UserDaoTest {
         checkSameUser(user2, users2.get(1));
     }
 
+    @Test
+    public void update() {
+        dao.deleteAll();
+        dao.add(user1);
+
+        user1.setName("홍길동");
+        user1.setPassword("springboot");
+        user1.setLevel(Level.GOLD);
+        user1.setLogin(1000);
+        user1.setRecommend(999);
+        dao.update(user1);
+
+        User user1Update = dao.get(user1.getId());
+        checkSameUser(user1, user1Update);
+    }
+
     private void checkSameUser(User user1, User user2) {
         assertEquals(user1.getId(), user2.getId());
         assertEquals(user1.getName(), user2.getName());
         assertEquals(user1.getPassword(), user2.getPassword());
+        assertEquals(user1.getLevel(), user2.getLevel());
+        assertEquals(user1.getLogin(), user2.getLogin());
+        assertEquals(user1.getRecommend(), user2.getRecommend());
     }
 }
