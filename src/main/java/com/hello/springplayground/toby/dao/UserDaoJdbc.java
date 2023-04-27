@@ -9,7 +9,7 @@ import javax.sql.DataSource;
 import java.util.List;
 
 
-public class UserDaoJdbc implements UserDao{
+public class UserDaoJdbc implements UserDao {
 
     private JdbcTemplate jdbcTemplate;
 
