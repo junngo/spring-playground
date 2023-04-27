@@ -1,16 +1,23 @@
 package com.hello.springplayground.toby.domain;
 
 public enum Level {
-    BASIC(1),
-    SILVER(2),
-    GOLD(3);
+
+    GOLD(3, null),
+    SILVER(2, GOLD),
+    BASIC(1, SILVER);
 
     private final int value;
-    Level(int value) {
+    private final Level next;
+    Level(int value, Level level) {
         this.value = value;
+        this.next = level;
     }
     public int intValue() {
         return value;
+    }
+
+    public Level nextLevel() {
+        return this.next;
     }
 
     public static Level valueOf(int value) {
