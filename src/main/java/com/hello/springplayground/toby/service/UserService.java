@@ -5,6 +5,9 @@ import com.hello.springplayground.toby.domain.Level;
 import com.hello.springplayground.toby.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import java.util.List;
 
@@ -13,16 +16,26 @@ import java.util.List;
 public class UserService {
 
     private final UserDao userDao;
+    private final PlatformTransactionManager transactionManager;
 
     public static final int MIN_LOGIN_COUNT_FOR_SILVER = 50;
     public static final int MIN_RECOMMEND_FOR_GOLD = 30;
 
     public void upgradeLevels() {
-        List<User> users = userDao.getAll();
-        for (User user : users) {
-            if (canUpgradeLevel(user)) {
-                upgradeLevel(user);
+        TransactionStatus status = this.transactionManager.getTransaction(
+                new DefaultTransactionDefinition()
+        );
+        try {
+            List<User> users = userDao.getAll();
+            for (User user : users) {
+                if (canUpgradeLevel(user)) {
+                    upgradeLevel(user);
+                }
             }
+            this.transactionManager.commit(status);
+        } catch (Exception e) {
+            this.transactionManager.rollback(status);
+            throw e;
         }
     }
 

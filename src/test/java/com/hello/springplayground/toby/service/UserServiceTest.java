@@ -12,7 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.transaction.PlatformTransactionManager;
 
+import javax.sql.DataSource;
 import java.util.Arrays;
 import java.util.List;
 
@@ -28,6 +30,10 @@ class UserServiceTest {
     private ApplicationContext context;
     @Autowired
     UserService userService;
+    @Autowired
+    DataSource dataSource;
+    @Autowired
+    PlatformTransactionManager transactionManager;
     private UserDaoJdbc dao;
     List<User> users;
 
@@ -49,7 +55,7 @@ class UserServiceTest {
     }
 
     @Test
-    public void upgradeLevels() {
+    public void upgradeLevels() throws Exception{
         dao.deleteAll();
         for (User user : users) {
             dao.add(user);
@@ -98,8 +104,8 @@ class UserServiceTest {
     static class TestUserService extends UserService {
         private String id;
 
-        private TestUserService(String id, UserDao userDao) {
-            super(userDao);
+        private TestUserService(String id, UserDao userDao, PlatformTransactionManager transactionManager) {
+            super(userDao, transactionManager);
             this.id = id;
         }
 
@@ -110,8 +116,8 @@ class UserServiceTest {
     }
 
     @Test
-    public void upgradeAllOrNothing() {
-        UserService testUserService = new TestUserService(users.get(3).getId(), dao);
+    public void upgradeAllOrNothing() throws Exception{
+        UserService testUserService = new TestUserService(users.get(3).getId(), dao, transactionManager);
         dao.deleteAll();
         for (User user : users) dao.add(user);
 
