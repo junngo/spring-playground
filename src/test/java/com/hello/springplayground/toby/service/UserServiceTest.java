@@ -1,6 +1,7 @@
 package com.hello.springplayground.toby.service;
 
 import com.hello.springplayground.SpringPlaygroundApplication;
+import com.hello.springplayground.toby.dao.UserDao;
 import com.hello.springplayground.toby.dao.UserDaoJdbc;
 import com.hello.springplayground.toby.domain.Level;
 import com.hello.springplayground.toby.domain.User;
@@ -65,9 +66,9 @@ class UserServiceTest {
     private void checkLevelUpgraded(User user, boolean upgraded) {
         User userUpdate = dao.get(user.getId());
         if (upgraded) {
-            assertEquals(userUpdate.getLevel(), user.getLevel().nextLevel());
+            assertEquals(user.getLevel().nextLevel(), userUpdate.getLevel());
         } else {
-            assertEquals(userUpdate.getLevel(), user.getLevel());
+            assertEquals(user.getLevel(), userUpdate.getLevel());
         }
     }
 
@@ -91,5 +92,32 @@ class UserServiceTest {
 
         assertEquals(getUserWithLevel.getLevel(), userWithLevel.getLevel());
         assertEquals(getUserWithoutLevel.getLevel(), Level.BASIC);
+    }
+
+    static class TestUserServiceException extends RuntimeException {}
+    static class TestUserService extends UserService {
+        private String id;
+
+        private TestUserService(String id, UserDao userDao) {
+            super(userDao);
+            this.id = id;
+        }
+
+        protected void upgradeLevel(User user) {
+            if (user.getId().equals(this.id)) throw new TestUserServiceException();
+            super.upgradeLevel(user);
+        }
+    }
+
+    @Test
+    public void upgradeAllOrNothing() {
+        UserService testUserService = new TestUserService(users.get(3).getId(), dao);
+        dao.deleteAll();
+        for (User user : users) dao.add(user);
+
+        try {
+            testUserService.upgradeLevels();
+        } catch (TestUserServiceException e) {}
+        checkLevelUpgraded(users.get(1), false);
     }
 }
